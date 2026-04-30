@@ -1,34 +1,26 @@
 package com.social.media.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"socialProfile", "posts", "socialGroups"})
 public class SocialUser {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "social_profile_id")
+    @OneToOne(mappedBy = "socialUser")
     private SocialProfile socialProfile;
 
     @OneToMany(mappedBy = "socialUser")
     private List<Post> posts = new ArrayList<>();
-
     @ManyToMany
     @JoinTable(
             name = "user_group",
@@ -36,4 +28,8 @@ public class SocialUser {
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     private Set<SocialGroup> socialGroups = new HashSet<>();
+    @Override
+    public int hashCode(){
+        return Objects.hash(id);
+    }
 }
