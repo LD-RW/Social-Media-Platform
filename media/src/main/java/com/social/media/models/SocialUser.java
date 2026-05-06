@@ -1,6 +1,5 @@
 package com.social.media.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +15,7 @@ public class SocialUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "socialUser")
+    @OneToOne(mappedBy = "socialUser", cascade = CascadeType.ALL)
     private SocialProfile socialProfile;
 
     @OneToMany(mappedBy = "socialUser")
@@ -32,4 +31,18 @@ public class SocialUser {
     public int hashCode(){
         return Objects.hash(id);
     }
+
+    public void setSocialProfile(SocialProfile socialProfile) {
+        if (this.socialProfile == socialProfile) {
+            return;
+        }
+        if(this.socialProfile != null) {
+            this.socialProfile.setSocialUser(null);
+        }
+        this.socialProfile = socialProfile;
+        if(socialProfile != null && socialProfile.getSocialUser() != this) {
+            socialProfile.setSocialUser(this);
+        }
+    }
+
 }
