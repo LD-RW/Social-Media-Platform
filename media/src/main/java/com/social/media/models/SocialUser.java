@@ -18,7 +18,7 @@ public class SocialUser {
     @OneToOne(mappedBy = "socialUser", cascade = CascadeType.ALL)
     private SocialProfile socialProfile;
 
-    @OneToMany(mappedBy = "socialUser")
+    @OneToMany(mappedBy = "socialUser", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
     @ManyToMany
     @JoinTable(
